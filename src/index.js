@@ -11,18 +11,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} >
-          <Route path="" element={<Login />} />
-          <Route path="/d" element={<Dashboard />} />
-          <Route path="*" element={
-            <div>
-              404 Not Found
-              <Link to="/">Go Home</Link>
-            </div>
-          } />
-        </Route>
-      </Routes>
+      <App />
     </BrowserRouter>
   </React.StrictMode>
 );

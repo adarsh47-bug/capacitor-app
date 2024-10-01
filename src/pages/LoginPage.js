@@ -1,43 +1,81 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonLabel,
+  useIonAlert,
+  useIonLoading
+} from '@ionic/react';
+import { useNavigate } from 'react-router-dom';
+import { logIn } from 'ionicons/icons';
+import { useState } from 'react';
+import '../theme/variables.css';
+
 
 function Login() {
-
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [alert] = useIonAlert();
+  const [present, dismiss] = useIonLoading();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
-    const email = event.target.elements[0].value;
-    const password = event.target.elements[1].value;
-    setLoading(true);
-    console
-      .log(`Email: ${email}, Password: ${password}`);
+    await present({ message: 'Loading...' });
 
     setTimeout(() => {
-      setLoading(false);
-      navigate('/d', { replace: true });
+      dismiss();
+      if (Math.random() < 0.5) {
+        alert({
+          header: 'Invalid credentials',
+          message: 'There is no user with that name and password.',
+          buttons: [{ text: 'Ok' }]
+        });
+      } else {
+        navigate('/app/dashboard');
+      }
     }, 1500);
-  }
+  };
 
   return (
-    <main>
-      <h1>Login</h1>
-      <form onSubmit={onSubmit}>
-        <label>
-          Email
-          <input type="email" />
-        </label>
-        <label>
-          Password
-          <input type="password" />
-        </label>
-        {loading ? <button>loading...</button> :
-          <button type="submit">Log in</button>
-        }
-      </form>
-    </main>
-  )
+    <>
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '70%' }}>
+
+        <IonCard>
+          <IonCardContent>
+            <form onSubmit={onSubmit}>
+              <div className="ion-margin-top">
+                <IonInput label="Username" labelPlacement="floating" fill="outline" placeholder="Enter your username"></IonInput>
+              </div>
+              <div className="ion-margin-top">
+                <IonInput label="Password" labelPlacement="floating" fill="outline" placeholder="Enter your password"></IonInput>
+              </div>
+
+              <div className="ion-margin-top">
+                <IonButton shape="round" expand="full" type="submit" color="primary">
+                  <IonIcon icon={logIn} slot="start" />
+                  Login
+                </IonButton>
+              </div>
+            </form>
+          </IonCardContent>
+        </IonCard>
+      </div>
+    </>
+  );
 }
 
 export default Login;
+
+// {/* <IonItem>
+//             <IonLabel position="floating">Email</IonLabel>
+//             <IonInput type="email" value={email} onIonChange={e => setEmail(e.detail.value)}></IonInput>
+//           </IonItem>
+
+//           <IonItem>
+//             <IonLabel position="floating">Password</IonLabel>
+//             <IonInput type="password" value={password} onIonChange={e => setPassword(e.detail.value)}></IonInput>
+//           </IonItem> */}
